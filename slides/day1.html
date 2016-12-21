@@ -1,0 +1,722 @@
+<!doctype html>
+<html lang="en">
+  <head>
+      <meta charset="utf-8">
+      <title>ReactJS Bootcamp</title>
+      <meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+      <meta name="author" content="Abhinav Sharma">
+      <meta name="apple-mobile-web-app-capable" content="yes" />
+      <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+      <link rel="stylesheet" href="./lib/css/reveal.css">
+      <link rel="stylesheet" href="./lib/css/theme/sky.css" id="theme">
+      <!-- Code syntax highlighting -->
+      <link rel="stylesheet" href="./lib/lib/css/zenburn.css">
+      <!-- Printing and PDF exports -->
+      <script>
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match( /print-pdf/gi ) ? './lib/css/print/pdf.css' : './lib/css/print/paper.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+      </script>
+      <!--[if lt IE 9]>
+      <script src="./lib/lib/js/html5shiv.js"></script>
+      <![endif]-->
+  </head>
+  <body>
+      <div class="reveal">
+          <!-- Any section element inside of this container is displayed as a slide -->
+          <div class="slides">
+              <section>
+                <h4>Welcome to Day 1 of ReactJS Bootcamp</h4>
+              </section>
+              <section data-transition="fade">
+                <h2>Agenda</h2>
+                <ul>
+                    <li>Grunt</li>
+                    <li>Gulp</li>
+                    <li>Webpack</li>
+                    <li>Babel</li>
+                    <li>Some ES2015 Features</li>
+                </ul>
+              </section>
+
+              <section>
+                <section>
+                  <h2>Build Tools</h2>
+                </section>
+                <section>
+                  <img src="./images/tools.png" />
+                </section>
+                <section>
+                  <h3>Workflow</h3>
+                  <div class="fragment" style="float: left; width: 33%;">
+                    <h5>Setup</h5>
+                    <ul>
+                      <li>Scaffolding</li>
+                      <li>Downloading</li>
+                    </ul>
+                  </div>
+                  <div class="fragment" style="float: left; width: 33%;">
+                    <h5>Develop</h5>
+                    <ul>
+                      <li>Watch</li>
+                      <li>Livereload</li>
+                      <li>Linting</li>
+                    </ul>
+                  </div>
+                  <div class="fragment" style="float: left; width: 33%;">
+                    <h5>Build</h5>
+                    <ul>
+                      <li>Tests</li>
+                      <li>Compile</li>
+                      <li>Concat</li>
+                      <li>Uglify</li>
+                      <li>Deployment</li>
+                    </ul>
+                  </div>
+                </section>
+                <section>
+                  <img src="./images/tasks.png" alt="Task">
+                </section>
+                <section>
+                  <h2>Tooling is critical to maintain a productive workflow</h2>
+                </section>
+                <section>
+                  <h1>
+                    Think
+                    <div class="fragment fade-in">
+                      <div class="fragment highlight-red">AUTOMATION</div>
+                    </div>
+                  </h1>
+                </section>
+                <section>
+                  <h1>
+                    Work less,
+                    <div class="fragment fade-in">
+                      <div class="fragment highlight-red">Do more</div>
+                    </div>
+                  </h1>
+                </section>
+                <section>
+                  <h2>
+                    Automation isn't being lazy
+                    <div class="fragment fade-in">
+                      <div class="fragment highlight-red">Its Called being efficient</div>
+                    </div>
+                  </h2>
+                </section>
+                <section>
+                  <h3>Lets take a look at various build tools</h3>
+                </section>
+                <section>
+                  <h2>Grunt</h2>
+                  <ul>
+                    <li>Javascript task runner</li>
+                    <li>Focuses on configuration</li>
+                    <li>Does common tasks very well and very easily configurable when going down a happy path</li>
+                    <li>Picks up and drops files from src and dest options so each task opens file readers/writers</li>
+                  </ul>
+                </section>
+                <section>
+                  <h3>GruntFile.js</h3>
+                  <pre><code>grunt.initConfig({
+    sass: {
+        dist: {
+            files: [{
+                src: 'dev/*.scss',
+                dest: '.tmp/styles',
+                expand: true,
+                ext: '.css'
+            }]
+        }
+    },
+    autoprefixer: {
+        dist: {
+            files: [{
+                expand: true,
+                cwd: '.tmp/styles',
+                src: '{,*/}*.css',
+                dest: 'css/styles'
+            }]
+        }
+    },
+    watch: {
+        styles: {
+            files: ['dev/*.scss'],
+            tasks: ['sass:dist', 'autoprefixer:dist']
+        }
+    }
+});
+grunt.registerTask('default', ['styles', 'watch']);
+                    </code></pre>
+                  </section>
+                  <section>
+                    <h2>Gulp</h2>
+                    <ul>
+                      <li>Focus on code</li>
+                      <li>Leverages streams for piping inbetween tasks</li>
+                      <li>Doesn't enforce much of anything. Just use code to wire up tasks and pipe information</li>
+                    </ul>
+                  </section>
+                  <section>
+                    <h2>Gulpfile.js</h2>
+                    <pre><code>gulp.task('sass', function () {
+  gulp.src('dev/*.scss')
+    .pipe(sass())
+    .pipe(autoprefixer())
+    .pipe(gulp.dest('css/styles'));
+});
+gulp.task('default', function() {
+  gulp.run('sass');
+  gulp.watch('dev/*.scss', function() {
+    gulp.run('sass');
+  });
+});
+                    </code></pre>
+                  </section>
+                  <section>
+                    <h2>Grunt vs Gulp</h2>
+                    <p>How they deal with their automation tasks on the inside</p>
+                    <p>Gulp uses Node streams while Grunt uses temp files.</p>
+                  </section>
+                  <section>
+                      <h2>Browserify</h2>
+                      <ul>
+                          <li>Built to ship Node modules to browsers</li>
+                          <li>Manages JS only</li>
+                          <li>Uses transforms to modify code</li>
+                          <li>provides pre and post bundle callbacks</li>
+                          <li>Minimal config</li>
+                      </ul>
+                  </section>
+                  <section>
+                    <h3>tasks/browserify.js</h3>
+                    <pre><code>module.exports = function(grunt, options) {
+  return {
+    dist: {
+      src: defaults.src,
+      dest: defaults.dest,
+      options: {
+        watch: false,
+        browserifyOptions: {
+          debug: false, //no sourcemaps
+          transform: ['reactify', 'uglifyify']
+        }
+      }
+    }
+  };
+};
+                    </code></pre>
+                  </section>
+                  <section>
+                    <h2>Webpack</h2>
+                    <ul>
+                        <li>Built to be a browser solution with nodejs support</li>
+                        <li>Bundles all your assets and has loaders to make that easier - great for modularity</li>
+                        <li>Supports all module formats out of the box</li>
+                        <li>Complex setup with loaders and etc </li>
+                        <li>Nice hotloading functionality with its built in dev server</li>
+                    </ul>
+                  </section>
+                  <section>
+                    <h3>webpack.config.js</h3>
+                    <pre><code>module.exports = {
+  context: path.join(__dirname, '../public'),
+  debug: DEBUG,
+  watch: DEBUG,
+  devtool: '#inline-source-map',
+  target: 'web',
+  entry: './scripts/index.js',
+  output: {
+    filename: 'bundle.js',
+    path: '/dist'
+  },
+  module: { //Notice the loaders for sass and jsx files
+    loaders: [
+      { test: /\.jsx?$/, exclude: /node_modules/, loaders: ['babel-loader'] },
+      { test: /\.scss$/, loaders: ['style', 'css', 'sass']}
+    ]
+  }
+}
+                    </pre></code>
+                  </section>
+                  <section>
+                    <h2>Brunch</h2>
+                    <ul>
+                        <li>Our solution for this bootcamp</li>
+                        <li>Small configs</li>
+                        <li>Three simple commands</li>
+                        <li>Productivity and happiness</li>
+                    </ul>
+                  </section>
+                  <section>
+                      <h3>Small configs</h3>
+                      <p>By being opinionated about your build pipeline, Brunch is able to provide a smooth and fast experience, and makes your config files take a drastic cut.</p>
+                    </section>
+                    <section>
+                      <h3>Three simple commands</h3>
+                      <p>It doesn't take much to get around with brunch:</p>
+                      <ul>
+                        <li><code style="font-weight: bold;">brunch new</code> to create a new project</li>
+                        <li><code style="font-weight: bold;">brunch build</code> to build</li>
+                        <li><code style="font-weight: bold;">brunch watch</code> to live compile</li>
+                      </ul>
+                    </section>
+                    <section>
+                      <h3>Productivity and happiness</h3>
+                      <ul>
+                        <li>NPM support</li>
+                        <li>source maps out-of-the-box</li>
+                        <li>fast from-zero builds</li>
+                        <li>incremental builds</li>
+                        <li>and more</li>
+                      </ul>
+                    </section>
+                    <section>
+                      <h3>Typical brunch config</h3>
+                      <pre><code>module.exports = {
+  files: {
+    javascripts: {
+      joinTo: {
+        'vendor.js': /^(?!app)/,
+        'app.js': /^app/
+      }
+    },
+    stylesheets: {joinTo: 'app.css'}
+  },
+
+  plugins: {
+    babel: {presets: ['es2015', 'react']},
+    postcss: {processors: [require('autoprefixer')]}
+  }
+};</code></pre>
+                    </section>
+                </section>
+
+                <section>
+                    <img height="150px" width="300px" src="https://raw.githubusercontent.com/babel/logo/master/babel.png" />
+                    <ul>
+                        <li>Formerly 6to5 but now handles more than ES2015</li>
+                        <li>Transpiles ESNext Code</li>
+                        <li>Can transform jsx & hot loading transformations</li>
+                        <li>Very up to date and community driven</li>
+                        <li>Used as a pre-build step when writing ESNext in the browser environments</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <section>
+                      <h2>ES2015</h2>
+                      <img src="http://m.memegen.com/bvnpsq.jpg" />
+                    </section>
+
+                    <section>
+                        <h2>Arrows =></h2>
+                        <ul>
+                            <li>Inspired by CoffeeScript</li>
+                            <li>Bound to outer this (have no context)</li>
+                            <li>Always Anonymous</li>
+                            <li>Cannot use new operator</li>
+                            <li>Don't have their own arguments object</li>
+                        </ul>
+                    </section>
+                    <section>
+                    <h1>Code</h1>
+<pre><code>
+//Arrows
+var evens = numbers.map(num => num % 2 === 0);
+nums.map((x) => x * 2);
+//or as a statement body
+var specialNums = numbers.map(num => {
+  return doSomething(num);
+});
+// Lexical this
+var person = {
+  _name: "Westin",
+  _friends: ["Not Justin", "Doug", "Brendan", "Igor"],
+  printFriends() {
+    this._friends.forEach(f =>
+      console.log(`${this._name} knows ${f}`));
+  }
+}
+</code></pre>
+                </section>
+            <section>
+                <h2>Let</h2>
+                <div>Allows for block scoping</div>
+<pre><code>
+function() {
+  if(x) {
+    var foo = 3;
+  }
+  var baz = 1;
+  //foo and baz in same scope due to hoisting
+}
+</code></pre>
+<pre><code>
+function() {
+  if(x) {
+    let foo = 3; //only inside the conditional
+  }
+  var baz = 1;
+  //foo and baz NOT in same scope as foo is no longer hoisted
+}
+</code></pre>
+            </section>
+              <section>
+                    <h2>Destructuring Object</h2>
+<pre><code>var people = [
+  {
+    name: 'Westin',
+    age: 25
+  }
+];
+
+people.forEach(({name, age}) => {
+  console.log(name + ":" + age)
+});
+</code></pre>
+<pre><code>let { first: f, last: l } = {first: 'westin', last: 'w'};
+let [x, y] = ['a', 'b'];
+let {length : len} = 'abc';
+</code></pre>
+                </section>
+                <section>
+                    <h2>Destructuring Array</h2>
+<pre><code>var [month, date, year] = [3, 14, 1977];
+
+let x = 3;
+let y = 4;
+[x, y] = [y, x];
+
+//ignore an index
+var [a, ,b] = [1,2,3];
+var doWork = function() {
+    return [1, 3, 2];
+};
+
+let [x, y, z] = doWork();
+</code></pre>
+                </section>
+                <section>
+                    <h2>Default, Rest, Spread</h2>
+                    <h3>Default Params</h3>
+<pre><code>let f =(x, y=12, z=y) => {
+  return x + y;
+}
+
+f(3) == 15;
+
+let [x=3, y] = []; // x = 3; y = undefined
+
+</code></pre>
+                </section>
+                <section>
+                    <h2>Rest</h2>
+                    <ul>
+                        <li>arguments object no real array</li>
+                        <li>rest parameters are arrays meaning can use map,filter,reduce,etc</li>
+                        <li>rest parameters are the params that haven't been named</li>
+                    </ul>
+<pre><code>function multiply(multiplier, ...theArgs) {
+  return theArgs.map(function (element) {
+    return multiplier * element;
+  });
+}
+</code></pre>
+                </section>
+                <section>
+                    <h2>Spread</h2>
+                    <div>Expand array params like Func.apply</div>
+<pre><code>function sum(x,y,z) {
+  return x + y + z;
+}
+
+total(1, 2, 3);
+
+//before
+total.apply(null, [1,2,3]);
+//now
+total(...[1,2,3]);
+
+let [x,...y] = 'abc'; // x='a'; y=['b', 'c'];
+
+</code></pre>
+                </section>
+                <section>
+                    <h2>Classes</h2>
+                    <ul>
+                        <li>just some syntactic sugar for prototype</li>
+                        <li>we will have supers and constructors</li>
+                    </ul>
+<pre><code style="word-wrap: break-word;">class TodoModel {
+    constructor(storage) {
+        this.storage = storage;
+    }
+
+    create(title='') {
+        return this.storage.save({title, completed: false});
+    }
+
+    ['h'+'ello' + 'world']() { //dynamic class properties
+        return 'Hello World';
+    }
+};
+</code></pre>
+                </section>
+                <section>
+<pre><code style="word-wrap: break-word;">class EnhancedTodoModel extends TodoModel {
+    constructor(storage) {
+        this.storage = storage;
+    }
+
+    create(title) {
+        console.log('Creating a new todo with title' + title)
+        super.create(title);
+    }
+}
+</code></pre>
+                </section>
+                <section>
+                    <h2>Modules</h2>
+<pre><code>import name from "module-name";
+import { member } from "module-name";
+import {member as alias } from "module-name";
+import { member1 , member2 } from "module-name";
+
+export { myFunction }; // exports a function declared earlier
+export const foo = Math.sqrt(2); // exports a constant
+export default function() { console.log('default module method'); }
+</code></pre>
+                </section>
+                <section>
+                    <h2>Can have both named and default exports</h2>
+                    <span>Default is really just another named export</span>
+                    <span>Default are favored however</span>
+<pre><code>
+export default function (obj) {...};
+
+export function each(obj, iterator, context) {...};
+
+export { each as forEach };
+
+
+import _, { each } from 'lodash';
+
+import myFunction , { each } from 'lodash';
+</code></pre>
+
+                  <a href="https://codepen.io/rhushikeshapte/pen/pNGXja?editors=0010" target="_blank">CodePen link</a>
+                </section>
+            </section>
+            <section data-transition="fade">
+                <h2>Agenda</h2>
+                <ul>
+                    <li>History of JS Frameworks</li>
+                    <li>React as a view layer</li>
+                    <li>JSX</li>
+                    <li>Mounting component to DOM</li>
+                    <li>Simple Components</li>
+                    <li>Props</li>
+                    <li>Passing the Props</li>
+                </ul>
+            </section>
+            <section>
+                <section>
+                  <h2>Evolution of <strong>JS</strong> Frameworks</h2>
+
+                </section>
+                <section>
+                  <h2>Vanilla JS</h2>
+                  <p>In the beginning, there was just JavaScript and almost everyone was afraid to use it because of the inconsistent DOM APIs across different browsers which resulted in lots of bugs.</p>
+                </section>
+                <section>
+                  <h2>Jquery</h2>
+                  <p>DOM manipulation and AJAX calls became less risky by abstracting away the differences into one consistent API</p>
+                </section>
+                <section>
+                  <p>1<sup>st</sup> Generation</p>
+                  <br>
+                  <br>
+                  <h2>Backbone JS</h2>
+                  <p>Backbone arrived and provided organization to that messy jQuery code</p>
+                  <ul>
+                    <li>Spine         - clone of backbone</li>
+                    <li>JavaScriptMVC - clone of backbone</li>
+                    <li>Knockout</li>
+                  </ul>
+                </section>
+                <section>
+                  <p>2<sup>nd</sup> Generation</p>
+                  <br>
+                  <br>
+                  <h2>Angular JS</h2>
+                  <p>AngularJS emerged with all the needed framework pieces in one box: data binding, routing, templating, persistence as well as a compelling testing story and a more declarative syntax.</p>
+                </section>
+                <section>
+                  <p>2<sup>nd</sup> Generation</p>
+                  <br>
+                  <h2>Ember JS</h2>
+                  <p> Ember was also built with similar features to AngularJS but a stronger router and more emphasis on URLs and not breaking the back button.</p>
+                  <ul>
+                    <li>Can Js - slimmed down version of JavaScriptMVC with data binding support</li>
+                    <li>Durandal - Merged with Angular</li>
+                    <li>Meteor JS</li>
+                  </ul>
+                </section>
+                <section>
+                  <p>3<sup>rd</sup> Generation</p>
+                  <ul>
+                    <li>React JS</li>
+                    <li>Vue JS</li>
+                    <li>Polymer JS</li>
+                  </ul>
+                </section>
+            </section>
+            <section>
+                <section>
+                  <h2>React</h2>
+                  <h4>Simply the view layer</h4>
+                </section>
+                <section>
+                    <h2>React</h2>
+                    <h4>according to Facebook</h4>
+                    <p>A JAVASCRIPT LIBRARY FOR BUILDING USER INTERFACES</p>
+                    <ul>
+                        <li>It's simple</li>
+                        <li>It's declarative</li>
+                        <li>It's composable</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Components are your building blocks</h2>
+                    <ul>
+                        <li>Self contained</li>
+                        <li>Modular</li>
+                        <li>Dynamic</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>How can we break this down into components?</h2>
+                    <img src="https://cdn.rawgit.com/westeezy/ReactJS-Bootcamp/master/walkthroughs/slides/day1/img/reddit.png"/>
+                </section>
+            </section>
+            <section>
+              <section>
+                <h2>Mount Component</h2>
+                <pre>
+                <code>import React from 'react'
+import ReactDOM from 'react-dom'
+import app from './components/App';
+
+ReactDOM.render(<App></App>, document.getElementById('root'));
+</code></pre>
+                <a href="http://codepen.io/krunalp/pen/pNGLWO?editors=1000" target="_blank">Go to codepen</a>
+              </section>
+              <section>
+                <h2>JSX</h2>
+                <span>XML like syntax</span>
+                <ul>
+                  <li>Render markup in your js code</li>
+                  <li>This makes sense with small modular components</li>
+                  <li>Babel can transpile JSX into plain old javascript</li>
+                  <li>You can very easily write your javascript logic alongside your presentation layer</li>
+                </ul>
+              </section>
+            </section>
+            <section>
+              <h2>React vs React DOM</h2>
+              <ul>
+                <li>React and ReactDOM were only recently split into two different libraries</li>
+                <li>ReactDOM is the glue between React and the DOM</li>
+                <li>you will only use it for one single thing: mounting with ReactDOM.render()</li>
+                <li>ReactDOM.findDOMNode() which you can use to gain direct access to a DOM element.</li>
+                <li>If your app is "isomorphic", ReactDOM.renderToString() in your back-end code.</li>
+                <li>You use React to define and create your elements, for lifecycle hooks, etc</li>
+              </ul>
+            </section>
+            <section>
+              <section>
+                <h2>What are PROPS?</h2>
+                <img src="./images/props.png" alt="passing props example" height="500" width="400" />
+              </section>
+              <section>
+                <h2>Where is the code?</h2>
+                <div class="fragment fade-in">
+                  <h4>supply props</h4>
+                  <pre>
+                        <code>
+  < Welcome name="Sara" />
+                        </code>
+                      </pre>
+                </div>
+                <div class="fragment fade-in">
+                  <h4>access props</h4>
+                  <pre>
+                      <code>
+class Welcome extends React.Component {
+  render() {
+    return <h1>Hello, {this.props.name}</h1>;
+  }
+}
+                      </code>
+                    </pre>
+                </div>
+              </section>
+              <section>
+                <h2>How will that look?</h2>
+                <div class="fragment fade-in">
+                  <h4>Like this!</h4>
+                  <h1>Hello, Sara</h1>
+                </div>
+              </section>
+              <section>
+                <h2>Want to make something a little more complicated?</h2>
+                <div class="fragment fade-in">
+                  <h4>Try making it on your own. Here's a <a href="http://codepen.io/wolverine602/pen/MbaEwx">CodePen link</a> for your reference</h4>
+                </div>
+                <div class="fragment fade-in">
+                  <h4>Let's try extracting components out of this</h4>
+                </div>
+              </section>
+            </section>
+            <section>
+              <section>
+                <h2>Passing Props</h2>
+                <img src="./images/passing_props.jpg" alt="passing props" height="500" width="400" />
+              </section>
+              <section>
+                <h3>Complex component structure</h2>
+                  <img src="./images/passing_props_example_1.png" alt="passing props example" height="500" width="400" />
+              </section>
+              <section>
+                <h3>Passing Props all the way down</h2>
+                  <img src="./images/passing_props_example_2.png" alt="passing props example" height="500" width="400" />
+              </section>
+              <section>
+                <h3>Not so simple is it?</h2>
+                  <img src="./images/passing_props_example_3.png" alt="passing props example" height="500" width="400" />
+              </section>
+
+              <section>
+                <img src="./images/Artboard%202.png" alt="passing props example" height="500" width="400" />
+              </section>
+              <section>
+                <img src="./images/Artboard%201.png" alt="passing props example" height="500" width="400" />
+                <div>
+                  <a href="http://codepen.io/krunalp/pen/JbxaKb?editors=0010" target="_blank">Link to Codepen</a>
+                </div>
+              </section>
+            </section>
+        </div>
+    </div>
+    <script src="./lib/lib/js/head.min.js"></script>
+    <script src="./lib/js/reveal.js"></script>
+    <script src="./js/app.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" charset="utf-8">
+        Reveal.initialize(revealConfig);
+    </script>
+</body>
+</html>
